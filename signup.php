@@ -21,9 +21,15 @@
 
     <div class="container">
 
-      <form class="form-signin" role="form" action="controller.php?m=signup">
+      <form class="form-signin" role="form" action="controller.php?m=signup" method="POST">
         <h2 class="form-signin-heading">Sign up</h2>
         <p><strong>Already have an account?</strong> <a href="login.php">Login here</a></p>
+        <?php
+        	if (! empty($_GET['error'])) {
+        		echo '<div class="alert alert-danger" role="alert">' . $_GET['error'] . '</div>';
+        	}
+        ?>
+        <!-- <div class="alert alert-danger" role="alert">Username already exists</div> -->
         <label for="inputUsername" class="sr-only">Username</label>
         <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>

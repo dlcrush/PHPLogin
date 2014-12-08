@@ -21,9 +21,14 @@
 
     <div class="container">
 
-      <form class="form-signin" role="form">
+      <form class="form-signin" role="form" action="controller.php?m=login" method="POST">
         <h2 class="form-signin-heading">Please sign in</h2>
         <p><strong>Need an account?</strong> <a href="signup.php">Sign up here. It's free!</a></p>
+        <?php
+        	if (! empty($_GET['error'])) {
+        		echo '<div class="alert alert-danger" role="alert">' . $_GET['error'] . '</div>';
+        	}
+        ?>
         <label for="inputUsername" class="sr-only">Username</label>
         <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
