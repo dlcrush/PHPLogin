@@ -6,6 +6,7 @@
 	require_once 'User.php';
 	require_once 'UsernameAlreadyExistsException.php';
 	require_once 'UserNotFoundException.php';
+	require_once 'functions.php';
 
 	if (empty($_GET['m'])) {
 		http_response_code(404);
@@ -14,17 +15,19 @@
 		die();
 	}
 
+	// initialize UsersCollection
 	$users = new UsersCollection;
+	$users->read(); // reads from data/users.json
 
-	$users->read();
-
+	// controller for action
 	switch($_GET['m']) {
 		case 'login':
+			// process user login
 			$username = $_POST['username'];
 			$password = $_POST['password'];
+
 			login($users, $username, $password);
 
-			header('Location: index.php');
 			break;
 		case 'signup':
 
@@ -65,55 +68,5 @@
 			echo "<h1>404</h1>";
 			echo "<p>Page Not found</p>";
 			die();
-	}
-
-
-	function login($users, $username, $password) {
-		try {
-			$user = $users->getUser($username);
-
-		}
-		catch (UserNotFoundException $e) {
-			header('Location: login.php?error=Username does not exist');
-		}
-
-		if ($user->authenticate($password)) {
-			session_unset();
-			$_SESSION['username'] = $username;
-			$_SESSION['user'] = $user;
-
-			header('Location: index.php');
-		}
-		else {
-			header('Location: login.php?error=Invalid username/password combination');
-		}
-	}
-
-	function logout() {
-		session_unset();
-	}
-
-	function signup($users, $username, $password, $first_name, $last_name, $birth_date) {
-		try {
-			$users->add(new User($username, $password, $first_name, $last_name, $birth_date));
-			header('Location: index.php');
-		} catch(UsernameAlreadyExistsException $e) {
-			// I should send back all the old form data but I'm too lazy to do that
-			header('Location: signup.php?error=Username already exists');
-		}
-	}
-
-	function update($users, $username, $password, $first_name, $last_name, $birth_date) {
-		try {
-			$user = $users->getUser($username);
-
-		}
-		catch (UserNotFoundException $e) {
-			header('Location: login.php');
-		}
-
-		$user->update($password, $first_name, $last_name, $birth_date);
-
-		return $user;
 	}
 ?>
