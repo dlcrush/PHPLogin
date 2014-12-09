@@ -1,7 +1,8 @@
 <?php
 
-	session_start();
+	session_start(); // start the session
 
+	// load classes
 	require_once 'UsersCollection.php';
 	require_once 'User.php';
 	require_once 'UsernameAlreadyExistsException.php';
@@ -9,6 +10,7 @@
 	require_once 'functions.php';
 
 	if (empty($_GET['m'])) {
+		// no action defined
 		http_response_code(404);
 		echo "<h1>404</h1>";
 		echo "<p>Page Not found</p>";
@@ -22,7 +24,9 @@
 	// controller for action
 	switch($_GET['m']) {
 		case 'login':
-			// process user login
+
+			// process login
+			
 			$username = $_POST['username'];
 			$password = $_POST['password'];
 
@@ -30,6 +34,8 @@
 
 			break;
 		case 'signup':
+
+			// process signup
 
 			$username = $_POST['username'];
 			$password = $_POST['password'];
@@ -44,6 +50,8 @@
 			header('Location: index.php');
 			break;
 		case 'update':
+
+			// process update
 			
 			$username = $_SESSION['username'];
 			$password = $_POST['password'];
@@ -59,11 +67,16 @@
 			break;
 		case 'logout':
 
+			// process logout
+
 			logout();
 
 			header('Location: login.php');
 			break;
 		default:
+
+			// doesn't match our valid list of actions
+
 			http_response_code(404);
 			echo "<h1>404</h1>";
 			echo "<p>Page Not found</p>";
